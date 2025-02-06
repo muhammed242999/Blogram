@@ -5,291 +5,189 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BLOGRAM / Tartış ve Sohbet Et</title>
     <style>
-        /* CSS kodları burada */
-  <style>
-    body {
-        font-family: Arial, sans-serif;
-        max-width: 600px;
-        margin: auto;
-        background: #f4f4f4;
-        padding: 20px;
-    }
-    .popup, .popup-overlay {
-        display: none;
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-    }
-    .popup {
-        background: white;
-        padding: 20px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        z-index: 1000;
-        border-radius: 8px;
-    }
-    .popup-overlay {
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.5);
-        z-index: 999;
-    }
-    .floating-button-container {
-        display: flex;
-        justify-content: center;
-        gap: 20px;
-        position: fixed;
-        bottom: 30px;
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 10;
-    }
-    .floating-button {
-        width: 50px;
-        height: 50px;
-        background: #c0c0c0;
-        color: white;
-        border-radius: 50%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
-        font-size: 30px;
-        border: none;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    }
-    .floating-button-username {
-        background-color: #c0c0c0;
-    }
-    .floating-button-post {
-        background-color: #c0c0c0;
-    }
-    .post-container textarea,
-    .post-container button {
-        width: 100%;
-        padding: 10px;
-        font-size: 16px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-    }
-    .post {
-        border: 1px solid #c0c0c0;
-        padding: 10px;
-        margin: 10px 0;
-        background: white;
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        position: relative;
-    }
-    .comment {
-        margin-left: 20px;
-        font-size: 0.9em;
-        color: #555;
-    }
-    .tag {
-        background: #ddd;
-        padding: 3px 6px;
-        border-radius: 4px;
-        font-size: 0.85em;
-        margin-right: 5px;
-        cursor: pointer;
-    }
-    .post-container,
-    .post,
-    .comment {
-        word-wrap: break-word;
-        overflow-wrap: break-word;
-        white-space: normal;
-        word-break: break-word;
-    }
-    .answer-form {
-        margin-top: 10px;
-        display: flex;
-        flex-direction: column;
-    }
-    .answers {
-        margin-left: 20px;
-        padding-top: 10px;
-        max-height: 200px;
-        overflow-y: auto;
-        position: relative;
-    }
-    .answer-post {
-        margin-top: 10px;
-        padding: 10px;
-        background: #c0c0c0;
-        border-radius: 8px;
-    }
-    .close-answer {
-        position: absolute;
-        bottom: 10px;
-        right: 10px;
-        cursor: pointer;
-        font-size: 18px;
-        color: #f44336;
-    }
-    .close-answer:hover {
-        color: #c62828;
-    }
-    .scroll-to-top {
-        position: fixed;
-        right: 20px;
-        bottom: 10px;
-        background: #4CAF50;
-        color: white;
-        border-radius: 50%;
-        width: 40px;
-        height: 40px;
-        font-size: 24px;
-        display: none;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    }
-    .scroll-to-top.show {
-        display: flex;
-    }
-    h1 {
-        font-family: 'Arial', sans-serif;
-        font-size: 15px;
-        font-weight: bold;
-        color: #333;
-        text-align: center;
-        margin-top: 1px;
-        text-transform: uppercase;
-        letter-spacing: 12px;
-    }
-    .mention {
-        color: #007bff;
-        font-weight: bold;
-    }
-</style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: auto; background: #f4f4f4; padding: 20px; }
+        h1 { font-family: 'Arial', sans-serif;font-size: 15px;font-weight: bold;color: #333;text-align: center;margin-top: 1px;text-transform: uppercase;letter-spacing: 12px; }
+        .popup, .popup-overlay { display: none;position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); }
+        .popup { background: white; padding: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); z-index: 1000; border-radius: 8px; }
+        .popup-overlay { width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 999; }
+        .floating-button-container { display: flex; justify-content: center; gap: 20px;position: fixed; bottom: 30px;left: 50%;transform: translateX(-50%); z-index: 10; }
+        .floating-button { width: 50px; height: 50px; background: #fff; color: #333; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; font-size: 30px; border: 1px solid #ccc; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); }
+        /* Tüm gönderiler için ortak stil */
+        .post { border: 1px solid #c0c0c0; padding: 15px; margin: 15px 0; background: white; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
+        .post .header { margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid #eee; }
+        .post .username { font-weight: bold;color: #333;font-size: 15px;display: flex; align-items: center; gap: 5px; }
+        .post .date { font-size: 0.85em; color: #666; margin-top: 5px; }
+        .post .content { margin: 15px 0; line-height: 1.6; color: #555; }
+        .post .actions {display: flex; gap: 10px;margin-top: 15px;} 
+        .tag { background: #f0f0f0; padding: 4px 8px; border-radius: 15px; font-size: 0.85em; margin-right: 5px; cursor: pointer; }
+        .answer-form { margin-top: 15px;display: flex; flex-direction: column; gap: 10px; }
+        .answer-form textarea {padding: 12px;font-size: 14px;border: 1px solid #ddd;border-radius: 8px;resize: vertical;min-height: 60px;}
+        .answer-form button { align-self: flex-start;padding: 8px 20px;font-size: 14px;border-radius: 18px;background: #f0f0f0;border: 1px solid #ddd;cursor: pointer;transition: all 0.2s ease; }
+        .answer-form button:hover { background: #e0e0e0; }
+        .like-button {background: #fff;border: 1px solid #ddd;border-radius: 18px;padding: 6px 15px; cursor: pointer; display: flex; align-items: center;gap: 5px;transition: all 0.2s ease; }
+        .like-button:hover { background: #f8f8f8; }
+        .like-button[data-state="liked"] { background: #ff4d4d; color: white; border-color: #ff4d4d; }
+        .donate-button { background: #8A2BE2; color: white !important; border-color: #8A2BE2 !important; }
+        .answers .answer-post { margin-top: 12px;padding: 12px;background: #f8f8f8; border-radius: 8px; border: 1px solid #eee; }
     </style>
 </head>
 <body>
     <h1>BLOGRAM</h1>
-    <!-- Popup'lar ve butonlar -->
+    <!-- Özel Gönderi -->
+    <div class="post">
+        <div class="header">
+            <div class="username">
+                BLOGRAM <img src="mavi-tik.png" alt="Doğrulanmış" style="width:15px;height:15px">
+                <div class="date">Yükleme Tarihi: 01.01.2024 12:00</div>
+            </div>
+        </div>
+        <div class="content">
+            🌟<strong>BLOGRAM Topluluğuna Hoş Geldiniz!</strong>🌟<br><br>
+            • <img src="mavi-tik.png" style="width:12px;height:12px">
+            <em>Kimliğini doğrulayan kullanıcılar içeriklerinden para kazanabilir</em><br>
+            • 💰 <em>Doğrulama sonrası reklam ve sponsorluk gelirlerinizi alın</em><br>
+            • 💬 <em>Topluluk kurallarına uyan güvenli sohbet ortamı</em>
+        </div>
+        <div class="actions">
+            <button class="like-button" data-state="notLiked" onclick="likePost(this)">Beğen (2300)</button>
+            <button class="like-button donate-button" onclick="donate()">🌟 Bağış Yap</button>
+        </div>
+        <div class="answer-form">
+            <textarea placeholder="Cevabınızı yazın..."></textarea>
+            <button onclick="submitAnswer(this)">Cevapla</button>
+        </div>
+        <div class="answers"></div>
+    </div>
+    <!-- Popup'lar -->
     <div id="usernamePopup" class="popup">
         <h2>Anonim Kullanıcı Adı Seç</h2>
         <p id="usernameDisplay">Kullanıcı adı seçilmedi</p>
         <button onclick="generateUsername()">Rastgele Kullanıcı Adı Oluştur</button>
         <button onclick="closePopup('usernamePopup')">Kapat</button>
-    </div>    
+    </div>
     <div id="postPopup" class="popup">
         <h2>Gönderi Paylaş</h2>
         <textarea id="postInput" placeholder="Ne düşünüyorsun?"></textarea>
-        <div>
-            <input type="text" id="postTags" placeholder="Etiketler (virgülle ayırın)">
-        </div>
+        <input type="text" id="postTags" placeholder="Etiketler (virgülle ayırın)">
         <button onclick="sharePost()">Paylaş</button>
         <button onclick="closePopup('postPopup')">Kapat</button>
-    </div>    
-
+    </div>
+    <!-- Floating Butonlar -->
     <div class="floating-button-container">
-        <button class="floating-button floating-button-username" onclick="openPopup('usernamePopup')">👤</button>
-        <button class="floating-button floating-button-post" onclick="openPopup('postPopup')">✍️</button>
-    </div>    
-
+        <button class="floating-button" onclick="openPopup('usernamePopup')">👤</button>
+        <button class="floating-button" onclick="openPopup('postPopup')">✍️</button>
+    </div>
+    <!-- Gönderiler -->
     <div id="posts"></div>
+<script>
+    let username = null;
 
-    <script>
-        let username = null;
+    function generateUsername() {
+        if (username) return alert("Zaten bir kullanıcı adı oluşturuldu.");
+        username = Math.random().toString(36).substr(2, 6);
+        document.getElementById("usernameDisplay").innerText = `Kullanıcı Adı: ${username}`;
+    }
 
-        document.addEventListener("DOMContentLoaded", function() {
-            // Popup'ları yönet
-            const popupElements = document.querySelectorAll('.popup');
-            popupElements.forEach(popup => {
-                popup.style.display = 'none';
-            });
+    async function sharePost() {
+        if (!username) return alert("Lütfen anonim kullanıcı adı seçin!");
+        let text = document.getElementById("postInput").value.trim();
+        let tagsInput = document.getElementById("postTags").value.trim();
+        let tags = tagsInput ? tagsInput.split(',').map(tag => tag.trim()) : [];
+
+        if (!text) return;
+
+        let postData = { username, content: text, tags };
+        let response = await fetch('http://127.0.0.1:8080/add_post', {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(postData)
         });
 
-        function generateUsername() {
-            if (username) return alert("Zaten bir kullanıcı adı oluşturuldu.");
-            username = Math.random().toString(36).substr(2, 6);
-            document.getElementById("usernameDisplay").innerText = `Kullanıcı Adı: ${username}`;
-        }
-
-        function sharePost() {
-            if (!username) return alert("Lütfen anonim kullanıcı adı seçin!");
-            let text = document.getElementById("postInput").value.trim();
-            let tags = document.getElementById("postTags").value.trim().split(',').map(tag => `<span class="tag">${tag.trim()}</span>`).join('');
-            if (!text) return;
-            let date = new Date().toLocaleString();
-            displayPost({ title: text, tags: tags, username: username, date: date });
+        let result = await response.json();
+        if (response.ok) {
+            alert("Gönderiniz paylaşıldı!");
             document.getElementById("postInput").value = "";
             document.getElementById("postTags").value = "";
-            closePopup('postPopup');
+            fetchPosts();
+        } else {
+            alert(result.error);
         }
+    }
 
-        function displayPost(post) {
+    async function fetchPosts() {
+        let response = await fetch('http://127.0.0.1:8080/get_posts');
+        let posts = await response.json();
+
+        let postContainer = document.getElementById("posts");
+        postContainer.innerHTML = ""; // Eski postları temizle
+
+        posts.forEach(post => {
             let postDiv = document.createElement("div");
             postDiv.className = "post";
-            postDiv.innerHTML = `<p><strong>${post.username}:</strong> ${post.title}</p><div>${post.tags}</div><p><em>${post.date}</em></p>
-                                 <button class="like-button" data-state="notLiked" onclick="likePost(this)">Beğen (0)</button>
-                                 <div class="answer-form">
-                                     <textarea placeholder="Cevabınızı yazın..."></textarea>
-                                     <button onclick="submitAnswer(this)">Cevapla</button>
-                                 </div>
-                                 <div class="answers"></div>`;
-            document.getElementById("posts").prepend(postDiv);
+            postDiv.innerHTML = `
+                <div class="header">
+                    <div class="username">${post.username}</div>
+                    <div class="date">${post.date}</div>
+                </div>
+                <div class="content">
+                    <p>${post.content}</p>
+                    <div>${post.tags.map(tag => `<span class="tag">${tag}</span>`).join(' ')}</div>
+                </div>
+                <div class="actions">
+                    <button class="like-button" onclick="likePost(${post.id}, this)">Beğen (${post.likes})</button>
+                </div>
+                <div class="answer-form">
+                    <textarea placeholder="Cevabınızı yazın..."></textarea>
+                    <button onclick="submitAnswer(${post.id}, this)">Cevapla</button>
+                </div>
+                <div class="answers">
+                    ${post.answers.map(answer => `
+                        <div class="answer-post">
+                            <p><strong>${answer.username}:</strong> ${answer.answer}</p>
+                            <div class="date">${answer.date}</div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+            postContainer.prepend(postDiv);
+        });
+    }
+
+    async function likePost(postId, button) {
+        let response = await fetch(`http://127.0.0.1:8080/like_post/${postId}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" }
+        });
+
+        let result = await response.json();
+        if (response.ok) {
+            button.innerText = `Beğen (${result.likes})`;
+        } else {
+            alert(result.error);
         }
+    }
 
-        function likePost(button) {
-            let countElement = button;
-            let count = parseInt(button.innerText.match(/\d+/)[0]);
-            let currentState = button.dataset.state || 'notLiked';
+    async function submitAnswer(postId, button) {
+        if (!username) return alert("Lütfen anonim kullanıcı adı seçin!");
+        let answerText = button.previousElementSibling.value.trim();
+        if (!answerText) return;
 
-            if (currentState === 'notLiked') {
-                count++;
-                button.innerText = `Beğen (${count})`;
-                button.dataset.state = 'liked'; 
-            } else if (currentState === 'liked') {
-                count--;
-                button.innerText = `Beğen (${count})`;
-                button.dataset.state = 'notLiked'; 
-            }
+        let response = await fetch(`http://127.0.0.1:8080/add_answer/${postId}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, answer: answerText })
+        });
+
+        let result = await response.json();
+        if (response.ok) {
+            alert("Cevabınız eklendi!");
+            fetchPosts();
+        } else {
+            alert(result.error);
         }
+    }
 
-        function submitAnswer(button) {
-            let postDiv = button.closest('.post');
-            let answerText = postDiv.querySelector('.answer-form textarea').value.trim();
-            let regex = /@(\w+)/g;
-            answerText = answerText.replace(regex, function(match, username) {
-                return `<span class="mention">@${username}</span>`;
-            });
-            if (!answerText) return;
-            let date = new Date().toLocaleString();
-            let answerDiv = document.createElement('div');
-            answerDiv.classList.add('answer-post');
-            answerDiv.innerHTML = `<p><strong>${username}:</strong> ${answerText}</p><p><em>${date}</em></p>
-                                   <button class="like-button" data-state="notLiked" onclick="likePost(this)">Beğen (0)</button>`;
-            let answersContainer = postDiv.querySelector('.answers');
-            answersContainer.appendChild(answerDiv);
-            postDiv.querySelector('.answer-form textarea').value = '';
-        }
-
-        function openPopup(popupId) {
-            if (popupId === 'postPopup' && !username) return alert("Lütfen anonim kullanıcı adı seçin!");
-            document.getElementById(popupId).style.display = 'block';
-        }
-
-        function closePopup(popupId) {
-            document.getElementById(popupId).style.display = 'none';
-        }
-
-        // Firebase SDK
-        import { initializeApp } from "firebase/app";
-        const firebaseConfig = {
-          apiKey: "AIzaSyAgmi00ohbSL4q1FygkQs2daY-3-WCp9eA",
-          authDomain: ".https://muhammed242999.github.io/Blogram/",
-          databaseURL: "  ",
-          projectId: "websiteblogram",
-          storageBucket: "websiteblogram.firebasestorage.app",
-          messagingSenderId: "851588862721",
-          appId: "1:851588862721:web:0aa53ff1b104b060bd4100"
-        };
-        const app = initializeApp(firebaseConfig);
-    </script>
+    document.addEventListener("DOMContentLoaded", fetchPosts);
+</script>
 </body>
-</html>
+    </html> 

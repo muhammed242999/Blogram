@@ -1,9 +1,4 @@
-<!DOCTYPE html>
-<html lang="tr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BLOGRAM / Tartış ve Sohbet Et</title>
+<!DOCTYPE html> <html lang="tr"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>BLOGRAM / Tartış ve Sohbet Et</title>
     <style>
         body { font-family: Arial, sans-serif; max-width: 600px; margin: auto; background: #f4f4f4; padding: 20px; }
         h1 { font-family: 'Arial', sans-serif;font-size: 15px;font-weight: bold;color: #333;text-align: center;margin-top: 1px;text-transform: uppercase;letter-spacing: 12px; }
@@ -49,7 +44,7 @@
             • 💬 <em>Topluluk kurallarına uyan güvenli sohbet ortamı</em>
         </div>
         <div class="actions">
-            <button class="like-button" data-state="notLiked" onclick="likePost(this)">Beğen (2300)</button>
+            <button class="like-button" onclick="likePost(${post.id}, this)">Beğen (${post.likes})</button>
             <button class="like-button donate-button" onclick="donate()">🌟 Bağış Yap</button>
         </div>
         <div class="answer-form">
@@ -81,28 +76,23 @@
     <div id="posts"></div>
 <script>
     let username = null;
-
     function generateUsername() {
         if (username) return alert("Zaten bir kullanıcı adı oluşturuldu.");
         username = Math.random().toString(36).substr(2, 6);
         document.getElementById("usernameDisplay").innerText = `Kullanıcı Adı: ${username}`;
     }
-
     async function sharePost() {
         if (!username) return alert("Lütfen anonim kullanıcı adı seçin!");
         let text = document.getElementById("postInput").value.trim();
         let tagsInput = document.getElementById("postTags").value.trim();
         let tags = tagsInput ? tagsInput.split(',').map(tag => tag.trim()) : [];
-
         if (!text) return;
-
         let postData = { username, content: text, tags };
         let response = await fetch('http://127.0.0.1:8080/add_post', {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(postData)
         });
-
         let result = await response.json();
         if (response.ok) {
             alert("Gönderiniz paylaşıldı!");
@@ -113,14 +103,11 @@
             alert(result.error);
         }
     }
-
     async function fetchPosts() {
         let response = await fetch('http://127.0.0.1:8080/get_posts');
         let posts = await response.json();
-
         let postContainer = document.getElementById("posts");
         postContainer.innerHTML = ""; // Eski postları temizle
-
         posts.forEach(post => {
             let postDiv = document.createElement("div");
             postDiv.className = "post";
@@ -152,32 +139,27 @@
             postContainer.prepend(postDiv);
         });
     }
-
     async function likePost(postId, button) {
-        let response = await fetch(`http://127.0.0.1:8080/like_post/${postId}`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" }
-        });
-
-        let result = await response.json();
-        if (response.ok) {
-            button.innerText = `Beğen (${result.likes})`;
-        } else {
-            alert(result.error);
-        }
+    let response = await fetch(`http://127.0.0.1:8080/like_post/${postId}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" }
+    });
+    let result = await response.json();
+    if (response.ok) {
+        button.innerText = `Beğen (${result.likes})`;
+    } else {
+        alert(result.error);
     }
-
+}
     async function submitAnswer(postId, button) {
         if (!username) return alert("Lütfen anonim kullanıcı adı seçin!");
         let answerText = button.previousElementSibling.value.trim();
         if (!answerText) return;
-
         let response = await fetch(`http://127.0.0.1:8080/add_answer/${postId}`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ username, answer: answerText })
         });
-
         let result = await response.json();
         if (response.ok) {
             alert("Cevabınız eklendi!");
@@ -186,8 +168,5 @@
             alert(result.error);
         }
     }
-
     document.addEventListener("DOMContentLoaded", fetchPosts);
-</script>
-</body>
-    </html> 
+</script> </body> </html> 

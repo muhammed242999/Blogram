@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BLOGRAM / Tartış ve Sohbet Et</title>
     <style>
-        /* Buradaki stil kısmı doğru görünüyor, devam edebilirsiniz. */
-           body { font-family: Arial, sans-serif; max-width: 600px; margin: auto; background: #f4f4f4; padding: 20px; }
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: auto; background: #f4f4f4; padding: 20px; }
         h1 { text-align: center; text-transform: uppercase; letter-spacing: 12px; font-size: 15px; font-weight: bold; color: #333; }
         .post { border: 1px solid #c0c0c0; padding: 15px; margin: 15px 0; background: white; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
         .post .header { margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid #eee; }
@@ -62,14 +61,8 @@
         <button onclick="addPost()">Paylaş</button>
         <button onclick="closePopup()">Kapat</button>
     </div>
-
-    <!-- Firebase JavaScript SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
-
     <script>
         let generatedUsername = null;
-
         function generateUsername() {
             if (!generatedUsername) {
                 const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -77,10 +70,8 @@
                 alert("Oluşturulan kullanıcı adı: " + generatedUsername);
             }
         }
-
         function openPopup() { document.getElementById('postPopup').style.display = 'block'; }
         function closePopup() { document.getElementById('postPopup').style.display = 'none'; }
-
         function previewMedia(event) {
             const mediaPreview = document.getElementById('mediaPreview');
             mediaPreview.innerHTML = '';
@@ -91,13 +82,12 @@
                     if (file.type.startsWith('image/')) {
                         mediaPreview.innerHTML = `<img src="${e.target.result}">`;
                     } else if (file.type.startsWith('video/')) {
-                        mediaPreview.innerHTML = `<video autoplay loop src="${e.target.result}" style="width: 100%; height: auto;"></video>`;
-                    }
+    mediaPreview.innerHTML = `<video autoplay loop src="${e.target.result}" style="width: 100%; height: auto;"></video>`;
+}
                 };
                 reader.readAsDataURL(file);
             }
         }
-
         function addPost() {
             const postText = document.getElementById('postInput').value;
             const mediaPreview = document.getElementById('mediaPreview').innerHTML;
@@ -112,8 +102,10 @@
                     <div class="content">${postText}</div>
                     <div class="media">${mediaPreview}</div>
                     <div class="actions">
-                        <button class="like-button" onclick="likePost(this)">Beğen: <span class="like-count">0</span></button>
-                        <span class="comment-count">Yorumlar: <span class="comment-count-value">0</span></span>
+                        <div class="actions">
+    <button class="like-button" onclick="likePost(this)">Beğen: <span class="like-count">0</span></button>
+    <span class="comment-count">Yorumlar: <span class="comment-count-value">0</span></span>
+</div>
                     </div>
                     <div class="answer-form">
                         <textarea placeholder="Yorumunuzu yazın..."></textarea>
@@ -127,7 +119,6 @@
                 closePopup();
             }
         }
-
         function likePost(button) {
             const likeCount = button.querySelector('.like-count');
             let count = parseInt(likeCount.textContent);
@@ -135,51 +126,74 @@
             button.dataset.state = button.dataset.state ? "" : "liked";
             likeCount.textContent = count;
         }
-
         function addComment(button) {
-            const postElement = button.closest('.post');
-            const textarea = postElement.querySelector('.answer-form textarea');
-            const commentText = textarea.value;
-            if (commentText.trim()) {
-                const answersDiv = postElement.querySelector('.answers');
-                const answer = document.createElement('div');
-                answer.className = 'answer-post';
-                answer.innerHTML = `
-                    <div class="header">
-                        <div class="username">${generatedUsername || "Anonim"} <span class="date">${new Date().toLocaleString()}</span></div>
-                    </div>
-                    <div class="content">${commentText}</div>
-                    <div class="actions">
-                        <button class="like-button" onclick="likePost(this)">Beğen <span class="like-count">0</span></button>
-                    </div>
-                `;
-                answersDiv.appendChild(answer);
-                textarea.value = '';
-                // Yorum sayısını artır
-                const commentCountElement = postElement.querySelector('.comment-count-value');
-                let currentCommentCount = parseInt(commentCountElement.textContent);
-                commentCountElement.textContent = currentCommentCount + 1;
-                // Her 3 yorumda kayma (scroll) olacak
-                if (answersDiv.children.length % 2 === 0) {
-                    answersDiv.scrollTop = answersDiv.scrollHeight;
-                }
-            }
+    const postElement = button.closest('.post');
+    const textarea = postElement.querySelector('.answer-form textarea');
+    const commentText = textarea.value;   
+    if (commentText.trim()) {
+        const answersDiv = postElement.querySelector('.answers');
+        const answer = document.createElement('div');
+        answer.className = 'answer-post';
+        answer.innerHTML = `
+            <div class="header">
+                <div class="username">${generatedUsername || "Anonim"} <span class="date">${new Date().toLocaleString()}</span></div>
+            </div>
+            <div class="content">${commentText}</div>
+            <div class="actions">
+                <button class="like-button" onclick="likePost(this)">Beğen <span class="like-count">0</span></button>
+            </div>
+        `;
+        answersDiv.appendChild(answer);
+        textarea.value = '';       
+        // Her 3 yorumda kayma (scroll) olacak
+        if (answersDiv.children.length % 2 === 0) {
+            answersDiv.scrollTop = answersDiv.scrollHeight;
         }
-        
-        // Firebase yapılandırma bilgileri
-        const firebaseConfig = {
-            apiKey: "AIzaSyAgmi00ohbSL4q1FygkQs2daY-3-WCp9eA",
-            authDomain: "websiteblogram.firebaseapp.com",
-            databaseURL: "https://websiteblogram-default-rtdb.firebaseio.com",
-            projectId: "websiteblogram",
-            storageBucket: "websiteblogram.firebasestorage.app",
-            messagingSenderId: "851588862721",
-            appId: "1:851588862721:web:0f319eb12909603bbd4100"
-        };
-
-        // Firebase'i başlat
-        const app = firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
+    }
+}
+    window.addEventListener('scroll', function() {
+    const videos = document.querySelectorAll('video');
+    videos.forEach(video => {
+        if (isElementInViewport(video)) {
+            video.play();  // Video görünürse oynatmaya devam et
+        } else {
+            video.pause();  // Video görünmüyorsa duraklat
+        }
+    });
+});
+function isElementInViewport(el) {
+    const rect = el.getBoundingClientRect();
+    return rect.top >= 0 && rect.bottom <= window.innerHeight;
+}
+    function addComment(button) {
+    const postElement = button.closest('.post');
+    const textarea = postElement.querySelector('.answer-form textarea');
+    const commentText = textarea.value;   
+    if (commentText.trim()) {
+        const answersDiv = postElement.querySelector('.answers');
+        const answer = document.createElement('div');
+        answer.className = 'answer-post';
+        answer.innerHTML = `
+            <div class="header">
+                <div class="username">${generatedUsername || "Anonim"} <span class="date">${new Date().toLocaleString()}</span></div>
+            </div>
+            <div class="content">${commentText}</div>
+            <div class="actions">
+                <button class="like-button" onclick="likePost(this)">Beğen <span class="like-count">0</span></button>
+            </div>
+        `;
+        answersDiv.appendChild(answer);
+        textarea.value = '';
+        // Yorum sayısını artır
+        const commentCountElement = postElement.querySelector('.comment-count-value');
+        let currentCommentCount = parseInt(commentCountElement.textContent);
+        commentCountElement.textContent = currentCommentCount + 1;
+        // Her 3 yorumda kayma (scroll) olacak
+        if (answersDiv.children.length % 2 === 0) {
+            answersDiv.scrollTop = answersDiv.scrollHeight;
+        }
+    }
+}
     </script>
 </body>
 </html>

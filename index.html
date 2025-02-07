@@ -194,61 +194,7 @@ function isElementInViewport(el) {
         }
     }
 }
-        // Gönderi eklemek için
-function addPost() {
-    const postText = document.getElementById('postInput').value;
-    const mediaPreview = document.getElementById('mediaPreview').innerHTML;
-
-    // Gönderi verilerini sunucuya JSON olarak gönderiyoruz
-    fetch('/add_post', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            content: postText,
-            media_url: mediaPreview
-        })
-    })
-    .then(response => response.json())
-    .then(data => {
-        alert(data.message);
-        document.getElementById('postInput').value = '';
-        document.getElementById('mediaPreview').innerHTML = '';
-        location.reload();  // Sayfa yenileniyor, yeni gönderiler görünecek
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
-}
-
-// Yorum eklemek için
-function addComment(button) {
-    const postElement = button.closest('.post');
-    const textarea = postElement.querySelector('.answer-form textarea');
-    const commentText = textarea.value;
-    const postId = postElement.dataset.id;  // Her postun benzersiz ID'si olacak
-
-    if (commentText.trim()) {
-        fetch(`/add_comment/${postId}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                content: commentText
-            })
-        })
-        .then(response => response.json())
-        .then(data => {
-            alert(data.message);
-            textarea.value = ''; // Yorum eklendikten sonra formu temizle
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
-    }
-}
+        
     </script>
 </body>
 </html>

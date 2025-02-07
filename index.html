@@ -194,6 +194,31 @@ function isElementInViewport(el) {
         }
     }
 }
+        <!-- Firebase JavaScript SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
+   };
+    
+    // Import Firebase modülleri
+import { initializeApp } from "firebase/app";
+import { getDatabase, ref, set } from "firebase/database";
+
+// Firebase yapılandırma bilgisi
+const firebaseConfig = {
+  apiKey: "AIzaSyAgmi00ohbSL4q1FygkQs2daY-3-WCp9eA",
+  authDomain: "websiteblogram.firebaseapp.com",
+  databaseURL: "https://websiteblogram-default-rtdb.firebaseio.com",
+  projectId: "websiteblogram",
+  storageBucket: "websiteblogram.firebasestorage.app",
+  messagingSenderId: "851588862721",
+  appId: "1:851588862721:web:0f319eb12909603bbd4100"
+};
+
+// Firebase'i başlat
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+   };
+    
         
     </script>
 </body>
